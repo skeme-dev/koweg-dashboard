@@ -5,6 +5,8 @@
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Label } from '$lib/components/ui/label/index.js';
 
+	import { enhance } from '$app/forms';
+
 	let { data }: { data: PageData } = $props();
 </script>
 
@@ -20,7 +22,7 @@
 				<p class="text-muted-foreground text-balance">Anmeldedaten eingeben, um dich anzumelden</p>
 			</div>
 			<div>
-				<form class="grid gap-4" action="?/login" method="post">
+				<form class="grid gap-4" action="?/login" method="post" use:enhance>
 					<div class="grid gap-2">
 						<Label for="email">Email</Label>
 						<Input name="email" id="email" type="email" placeholder="m@example.com" required />
