@@ -11,7 +11,7 @@ export const actions: Actionss = {
 
 		try {
 			await locals.pb.collection('users').authWithPassword(email, password);
-			return redirect(303, '/');
+			throw redirect(303, '/');
 		} catch (error) {
 			console.log('Error:', error);
 			return {
