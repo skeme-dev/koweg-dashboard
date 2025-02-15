@@ -143,7 +143,7 @@
 			<Sheet.Root>
 				<Sheet.Trigger asChild let:builder>
 					<Button builders={[builder]} size="icon" variant="outline" class="sm:hidden">
-						<PanelLeft class="h-5 w-5 bg-red-800 p-6 m-6" />
+						<PanelLeft class="h-5 w-5 p-6 m-6" />
 						<span class="sr-only">Toggle Menu</span>
 					</Button>
 				</Sheet.Trigger>
@@ -157,36 +157,36 @@
 							<span class="sr-only">Acme Inc</span>
 						</a>
 						<a
-							href="##"
+							href="/"
 							class="text-muted-foreground hover:text-foreground flex items-center gap-4 px-2.5"
 						>
 							<House class="h-5 w-5" />
 							Dashboard
 						</a>
 						<a
-							href="##"
+							href="/teams"
 							class="text-muted-foreground hover:text-foreground flex items-center gap-4 px-2.5"
 						>
-							<ShoppingCart class="h-5 w-5" />
-							Orders
+							<Volleyball class="h-5 w-5" />
+							Teams
 						</a>
-						<a href="##" class="text-foreground flex items-center gap-4 px-2.5">
-							<Package class="h-5 w-5" />
-							Products
-						</a>
-						<a
-							href="##"
-							class="text-muted-foreground hover:text-foreground flex items-center gap-4 px-2.5"
-						>
+						<a href="/users" class="text-foreground flex items-center gap-4 px-2.5">
 							<UsersRound class="h-5 w-5" />
-							Customers
+							Benutzer
 						</a>
 						<a
-							href="##"
+							href="/posts/create/meta"
 							class="text-muted-foreground hover:text-foreground flex items-center gap-4 px-2.5"
 						>
-							<ChartLine class="h-5 w-5" />
-							Settings
+							<BookOpen class="h-5 w-5" />
+							Berichte
+						</a>
+						<a
+							href="/inbox"
+							class="text-muted-foreground hover:text-foreground flex items-center gap-4 px-2.5"
+						>
+							<Inbox class="h-5 w-5" />
+							Anfragen
 						</a>
 					</nav>
 				</Sheet.Content>
