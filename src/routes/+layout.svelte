@@ -37,7 +37,10 @@
 
 	getBreadcrumb();
 </script>
+{#if page.url.pathname.startsWith("/login")}
+{@render children()}
 
+{:else}
 <div class="bg-muted/40 flex min-h-screen w-full flex-col">
 	<aside class="bg-background fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r sm:flex">
 		<nav class="flex flex-col items-center gap-4 px-2 sm:py-5">
@@ -246,3 +249,5 @@
 		{@render children()}
 	</div>
 </div>
+{/if}
+
