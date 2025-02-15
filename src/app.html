@@ -6,6 +6,29 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		%sveltekit.head%
 	</head>
+	<style>
+		@font-face {
+			font-family: Poppins;
+			src: url('%sveltekit.assets%/fonts/Poppins-Regular.ttf');
+			font-weight: normal;
+		}
+		@font-face {
+			font-family: Poppins;
+			src: url('%sveltekit.assets%/fonts/Poppins-Italic.ttf');
+			font-style: italic;
+		}
+		@font-face {
+			font-family: Poppins;
+			src: url('%sveltekit.assets%/fonts/Poppins-Bold.ttf');
+			font-weight: bold;
+		}
+		@font-face {
+			font-family: Poppins;
+			src: url('%sveltekit.assets%/fonts/Poppins-BoldItalic.ttf');
+			font-weight: bold;
+			font-style: italic;
+		}
+	</style>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents">%sveltekit.body%</div>
 	</body>
