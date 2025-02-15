@@ -242,7 +242,7 @@
 					<DropdownMenu.Item>Einstellungen</DropdownMenu.Item>
 					<DropdownMenu.Item>Hilfe</DropdownMenu.Item>
 					<DropdownMenu.Separator />
-					<form bind:this={logoutForm} method="post" action="/dashboard/login?/logout">
+					<form bind:this={logoutForm} method="post" action="/login?/logout">
 						<DropdownMenu.Item on:click={() => logoutForm.submit()}>
 							Abmelden
 						</DropdownMenu.Item>
