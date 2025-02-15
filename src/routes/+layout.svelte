@@ -29,6 +29,7 @@
 	import { page } from '$app/state';
 
 	let { children } = $props();
+	let logoutForm;
 
 	function getBreadcrumb() {
 		const routes = page.url.pathname.split('/');
@@ -241,7 +242,11 @@
 					<DropdownMenu.Item>Einstellungen</DropdownMenu.Item>
 					<DropdownMenu.Item>Hilfe</DropdownMenu.Item>
 					<DropdownMenu.Separator />
-					<DropdownMenu.Item>Abmelden</DropdownMenu.Item>
+					<form bind:this={logoutForm} method="post" action="/dashboard/login?/logout">
+						<DropdownMenu.Item on:click={() => logoutForm.submit()}>
+							Abmelden
+						</DropdownMenu.Item>
+					</form>
 				</DropdownMenu.Content>
 			</DropdownMenu.Root>
 		</header>
