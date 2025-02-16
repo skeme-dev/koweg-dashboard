@@ -1,13 +1,14 @@
 <script lang="ts">
-	import type { PageData } from './$types';
+	import type { PageProps } from './$types';
 
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Label } from '$lib/components/ui/label/index.js';
 
 	import { enhance } from '$app/forms';
+	import { page } from '$app/state';
 
-	let { data }: { data: PageData } = $props();
+	let { data, form }: PageProps = $props();
 </script>
 
 <svelte:head>
@@ -23,9 +24,19 @@
 			</div>
 			<div>
 				<form class="grid gap-4" action="?/login" method="post" use:enhance>
+					{#if form?.error}
+						<p class="error">{form?.message}</p>
+					{/if}
 					<div class="grid gap-2">
 						<Label for="email">Email</Label>
-						<Input name="email" id="email" type="email" placeholder="m@example.com" required />
+						<Input
+							name="email"
+							id="email"
+							value={form?.email ?? ''}
+							type="email"
+							placeholder="m@example.com"
+							required
+						/>
 					</div>
 					<div class="grid gap-2">
 						<div class="flex items-center">
@@ -41,13 +52,11 @@
 			</div>
 		</div>
 	</div>
-	<div class="bg-muted hidden lg:block">
-		<img
-			src="/images/placeholder.svg"
+	<div class="bg-muted hidden lg:block h-screen">
+		<!-- <img
+			src="https://images.unsplash.com/photo-1739369763175-f37f9d898ce4?q=80&w=1888&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
 			alt="placeholder"
-			width="1920"
-			height="1080"
-			class="h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
-		/>
+			class="object-contain dark:brightness-[0.2] dark:grayscale"
+		/> -->
 	</div>
 </div>

@@ -3,7 +3,10 @@
 	import Input from '$lib/components/ui/input/input.svelte';
 	import Label from '$lib/components/ui/label/label.svelte';
 	import Textarea from '$lib/components/ui/textarea/textarea.svelte';
+	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
+	import { invalidate } from '$app/navigation';
+	import { page } from '$app/state';
 
 	let { data }: { data: PageData } = $props();
 

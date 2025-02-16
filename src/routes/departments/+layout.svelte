@@ -1,8 +1,9 @@
 <script lang="ts">
-	import type { Snippet } from 'svelte';
+	import { onMount, type Snippet } from 'svelte';
 	import type { LayoutData } from './$types';
 	import Separator from '$lib/components/ui/separator/separator.svelte';
 	import SidebarNav from '$lib/components/posts/editor/sidebar-nav.svelte';
+	import { invalidate } from '$app/navigation';
 
 	let { data, children }: { data: LayoutData; children: Snippet } = $props();
 
@@ -12,7 +13,7 @@
 	}));
 </script>
 
-<div class="hidden space-y-6 p-10 pb-16 md:block">
+<div class="space-y-6 p-10 pb-16 md:block">
 	<div class="space-y-0.5">
 		<h2 class="text-2xl font-bold tracking-tight">Abteilungen verwalten</h2>
 		<p class="text-muted-foreground">Verwalte alle Abteilungen, sowie deren Teams.</p>

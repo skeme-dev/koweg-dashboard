@@ -199,6 +199,7 @@
 					<Card.Content>
 						<div class="grid gap-6 sm:grid-cols-3">
 							<div class="grid gap-3">
+								Hier soll ein Kalender gerendert werden
 								<Label for="category">Category</Label>
 								<Select.Root>
 									<Select.Trigger id="category" aria-label="Select category">
@@ -285,7 +286,7 @@
 						</div>
 					</Card.Content>
 				</Card.Root>
-				<Card.Root>
+				<!-- <Card.Root>
 					<Card.Header>
 						<Card.Title>Archive Product</Card.Title>
 						<Card.Description>Lipsum dolor sit amet, consectetur adipiscing elit.</Card.Description>
@@ -294,7 +295,7 @@
 						<div></div>
 						<Button size="sm" variant="secondary">Archive Product</Button>
 					</Card.Content>
-				</Card.Root>
+				</Card.Root> -->
 			</div>
 		</div>
 		<div class="flex items-center justify-center gap-2 md:hidden">
