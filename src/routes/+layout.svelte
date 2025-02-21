@@ -66,7 +66,7 @@
 					</Tooltip.Trigger>
 					<Tooltip.Content side="right">Dashboard</Tooltip.Content>
 				</Tooltip.Root>
-				<Tooltip.Root>
+				<!-- <Tooltip.Root>
 					<Tooltip.Trigger asChild let:builder>
 						<a
 							href="/teams/370ajc41u9q7hxm"
@@ -79,7 +79,7 @@
 						</a>
 					</Tooltip.Trigger>
 					<Tooltip.Content side="right">Teams</Tooltip.Content>
-				</Tooltip.Root>
+				</Tooltip.Root> -->
 				<Tooltip.Root>
 					<Tooltip.Trigger asChild let:builder>
 						<a
@@ -181,13 +181,13 @@
 								<House class="h-5 w-5" />
 								Dashboard
 							</a>
-							<a
+							<!-- <a
 								href="/teams/370ajc41u9q7hxm"
 								class="text-muted-foreground hover:text-foreground flex items-center gap-4 px-2.5"
 							>
 								<Volleyball class="h-5 w-5" />
 								Teams
-							</a>
+							</a> -->
 							<a href="/users" class="text-foreground flex items-center gap-4 px-2.5">
 								<UsersRound class="h-5 w-5" />
 								Benutzer

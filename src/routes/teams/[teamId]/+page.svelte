@@ -74,9 +74,16 @@
 <main class="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
 	<div class="mx-auto grid max-w-[59rem] flex-1 auto-rows-max gap-4">
 		<div class="flex items-center gap-4">
-			<Button variant="outline" size="icon" class="h-7 w-7">
+			<Button
+				onclick={() => {
+					window.history.back();
+				}}
+				variant="outline"
+				size="icon"
+				class="h-7 w-7"
+			>
 				<ChevronLeft class="h-4 w-4" />
-				<span class="sr-only">Back</span>
+				<span class="sr-only">Zurück</span>
 			</Button>
 			<h1 class="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
 				Team verwalten

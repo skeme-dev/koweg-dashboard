@@ -16,9 +16,9 @@ export const load = (async ({ locals }) => {
 		throw redirect(303, '/dashboard/departments/' + correspondingDepartment.items[0].id);
 	}
 
-	const departments = await locals.pb.collection('departments').getFullList();
-
-	console.log(departments);
+	const departments = await locals.pb
+		.collection('departments')
+		.getFullList({ expand: 'teams,leader' });
 
 	return { departments, users };
 }) satisfies PageServerLoad;
