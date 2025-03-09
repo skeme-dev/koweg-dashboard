@@ -3,6 +3,7 @@
 	import { Button } from '$lib/components/ui/button/index.js';
 	import * as Dialog from '../components/ui/dialog';
 	import CropperComponent from './CropperComponent.svelte';
+	import ImageCropper from './ImageCropper.svelte';
 
 	export let file: File;
 	export let open: boolean;
@@ -165,7 +166,8 @@
 					{/if}
 				{:else if step == 2}
 					<div class="flex flex-col w-full h-full">
-						<CropperComponent bind:enable={cropped} bind:croppedImage imageFile={file} />
+						<!-- <CropperComponent bind:enable={cropped} bind:croppedImage imageFile={file} /> -->
+						<ImageCropper bind:enable={cropped} bind:croppedImage imageFile={file} />
 					</div>
 				{:else}
 					<div class="flex flex-col w-full h-full">

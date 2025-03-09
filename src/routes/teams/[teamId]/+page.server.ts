@@ -9,8 +9,6 @@ export const load = (async ({ params, locals }) => {
 		expand: 'trainers,events,trainings_schedule'
 	});
 
-	console.log(team);
-
 	const events = await locals.pb.collection('events').getList(1, 10, {
 		filter: locals.pb.filter('corresponding_teams ~ {:id}', { id: params.teamId })
 	});

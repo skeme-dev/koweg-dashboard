@@ -35,6 +35,8 @@
 	import DeleteDialog from '$lib/components/DeleteDialog.svelte';
 	import { Trash, Trash2 } from 'lucide-svelte';
 	import { enhance } from '$app/forms';
+	import Calendar from '$lib/components/ui/calendar/calendar.svelte';
+	import EventsCard from '$lib/components/teams/events-card.svelte';
 
 	let { data }: { data: PageData } = $props();
 
@@ -61,6 +63,8 @@
 	let addTrainingSchedule = $state(false);
 
 	let formElement;
+
+	console.log(data.team.expand.events);
 </script>
 
 <ImageUploadDialog open={imageUploadDialogOpen} />
@@ -71,7 +75,7 @@
 	dialogDescription="Das Löschen dieses Teams kann nicht mehr rückgängig gemacht werden."
 	onDelete={() => alert('LÖSCHEN')}
 />
-<main class="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
+<main class="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 !pb-12">
 	<div class="mx-auto grid max-w-[59rem] flex-1 auto-rows-max gap-4">
 		<div class="flex items-center gap-4">
 			<Button
@@ -199,7 +203,7 @@
 						</Button>
 					</Card.Footer>
 				</Card.Root>
-				<Card.Root>
+				<!-- <Card.Root>
 					<Card.Header>
 						<Card.Title>Events</Card.Title>
 					</Card.Header>
@@ -234,7 +238,7 @@
 							</div>
 						</div>
 					</Card.Content>
-				</Card.Root>
+				</Card.Root> -->
 			</div>
 			<div class="grid auto-rows-max items-start gap-4 lg:gap-8">
 				<Card.Root>
@@ -309,6 +313,7 @@
 			<Button variant="outline" size="sm">Discard</Button>
 			<Button size="sm">Save Product</Button>
 		</div>
+		<EventsCard events={data.team.expand.events} />
 	</div>
 </main>
 <Dialog.Root bind:open={userSelectionOpen}>

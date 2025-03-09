@@ -44,10 +44,6 @@
 					<File class="h-3.5 w-3.5" />
 					<span class="sr-only sm:not-sr-only sm:whitespace-nowrap"> Exportieren </span>
 				</Button>
-				<Button size="sm" class="h-8 gap-1">
-					<CirclePlus class="h-3.5 w-3.5" />
-					<span class="sr-only sm:not-sr-only sm:whitespace-nowrap"> Benutzer hinzufügen </span>
-				</Button>
 			</div>
 		</div>
 		<Tabs.Content value="all">
