@@ -27,6 +27,7 @@
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 	import { BookOpen, Building2, Inbox, Volleyball } from 'lucide-svelte';
 	import { page } from '$app/state';
+	import FileUploadDialog from '$lib/fileUpload/file-upload-dialog.svelte';
 
 	let { children } = $props();
 	let logoutForm = $state();
@@ -42,6 +43,8 @@
 {#if page.url.pathname.startsWith('/login')}
 	{@render children()}
 {:else}
+	<FileUploadDialog />
+
 	<div class="bg-muted/40 flex min-h-screen w-full flex-col">
 		<aside class="bg-background fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r sm:flex">
 			<nav class="flex flex-col items-center gap-4 px-2 sm:py-5">

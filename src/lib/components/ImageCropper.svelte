@@ -2,9 +2,10 @@
 	import { onMount, tick } from 'svelte';
 	import Cropper from 'cropperjs';
 	import 'cropperjs/dist/cropper.css';
+	import { Button } from './ui/button/index';
 
 	export let imageFile: File;
-	export let croppedImage: Blob;
+	export let croppedImage: string;
 	export let enable: boolean;
 
 	let imageSrc = URL.createObjectURL(imageFile);
@@ -30,8 +31,10 @@
 		}
 		if (imageElement) {
 			cropper = new Cropper(imageElement, {
-				aspectRatio: 1, // Seitenverhältnis 1:1 (kann geändert werden)
-				viewMode: 2
+				aspectRatio: 16 / 9, // Seitenverhältnis 1:1 (kann geändert werden)
+				viewMode: 2,
+				autoCropArea: 1,
+				responsive: true
 			});
 		}
 	}
@@ -58,10 +61,10 @@
 
 <div class="container">
 	{#if imageSrc}
-		<div>
+		<div class="cc">
 			<img bind:this={imageElement} src={imageSrc} alt="Bild zum Zuschneiden" />
 		</div>
-		<button on:click={cropImage}>Bild zuschneiden & herunterladen</button>
+		<Button class="mt-3" on:click={cropImage} size="sm" variant="outline">Bild zuschneiden</Button>
 	{/if}
 </div>
 
@@ -69,13 +72,20 @@
 	.container {
 		text-align: center;
 		margin-top: 20px;
-		width: 686px;
-		height: 497px;
+		display: block;
+		height: calc(100vh * (1 / 3));
+		width: 100%;
+	}
+	.cc {
+		max-width: 100% !important;
+		height: 100% !important;
 	}
 	img {
-		max-width: 100%;
+		width: 100%;
+		height: 100%;
 		display: block;
 		margin: auto;
+		object-fit: cover;
 	}
 	button {
 		margin-top: 10px;

@@ -38,6 +38,8 @@
 	import Calendar from '$lib/components/ui/calendar/calendar.svelte';
 	import EventsCard from '$lib/components/teams/events-card.svelte';
 
+	import getFiles from '$lib/fileUpload';
+
 	let { data }: { data: PageData } = $props();
 
 	let currentTeamName = $state(data.team.name);
@@ -63,11 +65,9 @@
 	let addTrainingSchedule = $state(false);
 
 	let formElement;
-
-	console.log(data.team.expand.events);
 </script>
 
-<ImageUploadDialog open={imageUploadDialogOpen} />
+<!-- <ImageUploadDialog bind:image={imageFile} bind:open={imageUploadDialogOpen} /> -->
 
 <DeleteDialog
 	bind:open={deleteTeamDialogOpen}
@@ -287,7 +287,9 @@
 							/>
 							<div class="">
 								<button
-									onclick={() => (imageUploadDialogOpen = true)}
+									onclick={() => {
+										getFiles();
+									}}
 									class="py-3 flex w-full items-center justify-center rounded-md border border-dashed"
 								>
 									<Upload class="text-muted-foreground h-4 w-4" />

@@ -7,7 +7,9 @@
 
 	export let file: File;
 	export let open: boolean;
-	export let image: Blob;
+	export let image: string;
+
+	let croppedImage: string | null;
 
 	let fileInput;
 	let fileHandle;
@@ -16,9 +18,8 @@
 	let nextButtonDisabled: boolean = true;
 	let cropped: boolean = false;
 
-	let fileUrl: string;
-	let croppedImage: Blob = '';
-	let croppedImageUrl: string;
+	let fileUrl: string | null;
+	let croppedImageUrl: string | null;
 
 	let step: number = 1;
 
@@ -27,7 +28,7 @@
 	}
 
 	$: if (croppedImage) {
-		croppedImageUrl = URL.createObjectURL(croppedImage);
+		croppedImageUrl = croppedImage;
 	}
 
 	const pickerOptions = {
@@ -73,10 +74,31 @@
 		const d = new Date(s);
 		return d.toLocaleString();
 	}
+
+	function reset() {
+		step = 1;
+		cropped = false;
+		file = null;
+		fileUrl = null;
+		showFilePicker = true;
+		croppedImage = null;
+		croppedImageUrl = null;
+	}
+
+	$: if (croppedImage) {
+		console.log(croppedImage);
+		image = croppedImage;
+	}
 </script>
 
-<Dialog.Root bind:open>
-	<Dialog.Content class=" sm:max-w-[60%] h-2/3 flex flex-col">
+<Dialog.Root
+	bind:open
+	onOutsideClick={() => {
+		open = false;
+		reset();
+	}}
+>
+	<Dialog.Content class=" sm:max-w-[75%] h-[70%] flex flex-col">
 		<Dialog.Header class="h-fit">
 			<Dialog.Title>Bild hochladen</Dialog.Title>
 			<Dialog.Description>Lade ein Bild hoch und schneide es gegebenfalls zu.</Dialog.Description>
@@ -165,14 +187,15 @@
 						</div>
 					{/if}
 				{:else if step == 2}
-					<div class="flex flex-col w-full h-full">
-						<!-- <CropperComponent bind:enable={cropped} bind:croppedImage imageFile={file} /> -->
+					<div class="image-cropper-container">
 						<ImageCropper bind:enable={cropped} bind:croppedImage imageFile={file} />
 					</div>
 				{:else}
 					<div class="flex flex-col w-full h-full">
 						<div class="w-full h-[300px]">
-							<img class="mx-auto w-max h-full object-contain" src={croppedImageUrl} alt="" />
+							{#if croppedImageUrl}
+								<img class="mx-auto w-max h-full object-contain" src={croppedImageUrl} alt="" />
+							{/if}
 						</div>
 					</div>
 				{/if}
@@ -198,16 +221,24 @@
 						return step++;
 					} else if (step == 3) {
 						URL.revokeObjectURL(fileUrl);
-						URL.revokeObjectURL(croppedImageUrl);
 						image = croppedImage;
 
 						showFilePicker = true;
 						step = 1;
 
 						open = false;
+
+						reset();
 					}
 				}}>{step == 3 ? 'Fertigstellen' : 'Weiter'}</Button
 			>
 		</Dialog.Footer>
 	</Dialog.Content>
 </Dialog.Root>
+
+<style>
+	.image-cropper-container {
+		width: 100%;
+		height: 100% !important;
+	}
+</style>
