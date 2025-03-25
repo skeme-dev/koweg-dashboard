@@ -10,6 +10,12 @@
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import * as Command from '$lib/components/ui/command/index.js';
 	import * as Avatar from '$lib/components/ui/avatar/index.js';
+	import { updateDepartment } from '$lib/api/departments';
+	import { createTeam } from '$lib/api/teams';
+	import { toast } from 'svelte-sonner';
+	import { invalidateAll } from '$app/navigation';
+	import CreateTeamDialog from '$lib/components/CreateTeamDialog.svelte';
+	import { onMount } from 'svelte';
 
 	let { data }: { data: PageData } = $props();
 
@@ -29,17 +35,58 @@
 	});
 
 	let userSelectionOpen = $state(false);
-	let selectedUser = $state();
+	let selectedUser = $state.raw(null);
+
+	let createTeamDialogOpen = $state.raw(false);
 </script>
 
+<CreateTeamDialog departmentId={data.department.id} bind:open={createTeamDialogOpen} />
 <div class="flex flex-col">
 	<div class="flex gap-6">
 		<Card.Root class="w-full">
 			<Card.Header class="relative">
 				<Card.Title>Abteilungsinformationen</Card.Title>
 				<Card.Description>Bearbeite die Abteilungsinformationen.</Card.Description>
-				<Button disabled={!canSave} variant="outline" class="absolute top-4 right-6"
-					>Speichern</Button
+				<Button
+					onclick={() => {
+						if (
+							!(
+								currentDepartmentName != data.department.label ||
+								currentDepartmentDescription != data.department.description ||
+								currentDepartmentLeader != data.department.expand.leader
+							)
+						)
+							return;
+
+						let updateData = {
+							...(currentDepartmentName != data.department.label && {
+								label: currentDepartmentName
+							}),
+							...(currentDepartmentDescription != data.department.description && {
+								description: currentDepartmentDescription
+							}),
+							...(currentDepartmentLeader != data.department.expand.leader && {
+								leader: currentDepartmentLeader.id
+							})
+						};
+
+						console.log(updateData);
+						updateDepartment(
+							data.department.id,
+							updateData,
+							async () => {
+								toast.success('Abteilung wurde erfolgreich aktualisiert.');
+								await invalidateAll();
+							},
+							(error) => {
+								console.error(error);
+								toast.error('Fehler beim Aktualisieren der Abteilung');
+							}
+						);
+					}}
+					disabled={!canSave}
+					variant="outline"
+					class="absolute top-4 right-6">Speichern</Button
 				>
 			</Card.Header>
 			<Card.Content>
@@ -117,7 +164,13 @@
 					</Card.Footer>
 				</Card.Root>
 			{/each}
-			<Button variant="outline" class="h-full gap-2 text-sm">
+			<Button
+				onclick={() => {
+					createTeamDialogOpen = true;
+				}}
+				variant="outline"
+				class="h-full gap-2 text-sm"
+			>
 				<CirclePlus class="h-3.5 w-3.5" />
 				Team erstellen
 			</Button>
@@ -145,7 +198,6 @@
 							class="flex items-center px-2"
 							onSelect={() => {
 								selectedUser = user;
-								console.log(selectedUser);
 							}}
 						>
 							<Avatar.Root>
@@ -156,7 +208,7 @@
 								<p class="text-sm font-medium leading-none">
 									{user.name}
 								</p>
-								<p class="text-muted-foreground text-sm">
+								<p class="text-muted-foregro und text-sm">
 									{user.email}
 								</p>
 							</div>

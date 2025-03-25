@@ -28,22 +28,28 @@
 	import { BookOpen, Building2, Inbox, Volleyball } from 'lucide-svelte';
 	import { page } from '$app/state';
 	import FileUploadDialog from '$lib/fileUpload/file-upload-dialog.svelte';
+	import DeleteDialog from '$lib/components/delete-dialog/delete-dialog.svelte';
+	import Sonner from '$lib/components/ui/sonner/sonner.svelte';
+	import UserPickerDialog from '$lib/components/user-picker/user-picker-dialog.svelte';
 
 	let { children } = $props();
 	let logoutForm = $state();
 
 	function getBreadcrumb() {
 		const routes = page.url.pathname.split('/');
-		console.log(routes);
 	}
 
 	getBreadcrumb();
 </script>
 
+<Sonner />
+
 {#if page.url.pathname.startsWith('/login')}
 	{@render children()}
 {:else}
 	<FileUploadDialog />
+	<UserPickerDialog users={page.data.users} />
+	<DeleteDialog />
 
 	<div class="bg-muted/40 flex min-h-screen w-full flex-col">
 		<aside class="bg-background fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r sm:flex">
@@ -144,7 +150,7 @@
 				<Tooltip.Root>
 					<Tooltip.Trigger asChild let:builder>
 						<a
-							href="##"
+							href="/settings"
 							class="text-muted-foreground hover:text-foreground flex h-9 w-9 items-center justify-center rounded-lg transition-colors md:h-8 md:w-8"
 							use:builder.action
 							{...builder}

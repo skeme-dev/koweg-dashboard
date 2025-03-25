@@ -2,6 +2,7 @@
 
 import type { Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
+import { teamSchema } from '$lib/api/teams';
 
 export const load = (async ({ params, locals }) => {
 	const users = await locals.pb.collection('users').getFullList({ sort: '-created' });
@@ -27,6 +28,38 @@ export const load = (async ({ params, locals }) => {
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {
+	updateTeam: async ({ request, locals, params }) => {
+		const keys = [
+			'name',
+			'description',
+			'trainers',
+			'events',
+			'relatedPosts',
+			'team_image',
+			'department'
+		];
+
+		const form = await request.formData();
+		const teamId = params.teamId as string;
+
+		let data = {};
+
+		for (const key of keys) {
+			if (form.has(key)) {
+				data[key] = form.getAll(key).length == 1 ? form.get(key) : form.getAll(key);
+			}
+		}
+
+		console.log(data);
+
+		try {
+			await locals.pb.collection('teams').update(teamId, data);
+			return { success: true };
+		} catch (error) {
+			console.error(error);
+			return { error: true };
+		}
+	},
 	createTrainingSchedule: async ({ request, locals, params }) => {
 		const form = await request.formData();
 

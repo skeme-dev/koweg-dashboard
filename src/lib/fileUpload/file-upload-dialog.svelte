@@ -1,43 +1,133 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { fileUploadDialogStore } from './store';
+	import { onDestroy } from 'svelte';
+
+	import Button from '../components/ui/button/button.svelte';
 	import * as Dialog from '../components/ui/dialog';
 
-	let open: boolean = true;
+	import { confirmUpload, fileStore, uploadDialogStore } from './store';
+	import { resetFileUpload } from '.';
+	import FileUploadCropper from './file-upload-cropper.svelte';
 
-	let file: File | null = null;
-	let dialogElement: HTMLDialogElement;
+	let open: boolean = $state.raw(false);
+	let files: File[] = $state.raw([]);
 
-	fileUploadDialogStore.subscribe((value) => {
-		if (value.open) {
+	let cropping: boolean = $state.raw(false);
+
+	let originalFile = $state.raw(null);
+	// svelte-ignore non_reactive_update
+	let getCroppedImage: (() => Promise<unknown>) | undefined;
+
+	function handleInputChange(e) {
+		if (e.target?.files.length === 0) return;
+		files = e.target?.files;
+	}
+
+	const unsubscribe = uploadDialogStore.subscribe((value) => {
+		if (value) {
 			open = true;
+		} else {
+			open = false;
 		}
+	});
+
+	onDestroy(() => {
+		unsubscribe();
 	});
 </script>
 
-<Dialog.Root bind:open>
-	<Dialog.Content class="max-w-[50%]">
+<Dialog.Root
+	bind:open
+	onOpenChange={(opened) => {
+		if (!opened) {
+			resetFileUpload();
+		}
+	}}
+>
+	<Dialog.Content class={cropping ? 'max-w-fit' : 'max-w-[50%]'}>
 		<Dialog.Header>
-			<Dialog.Title>Datei hochladen</Dialog.Title>
+			<Dialog.Title>Dateien hochladen</Dialog.Title>
 			<Dialog.Description>
-				This action cannot be undone. This will permanently delete your account and remove your data
-				from our servers.
+				Make changes to your profile here. Click save when you're done.
 			</Dialog.Description>
 		</Dialog.Header>
-		<div class="">
-			{#if !file}
-				<input
-					type="file"
-					accept="image/*"
-					onchange={(e: Event) => {
-						if (e.target.files) {
-							file = e.target.files[0];
-						} else return;
-					}}
-				/>
+		{#if files.length > 0}
+			<div class="grid h-fit gap-3">
+				{#each files as file, index}
+					<div class="bg-accent flex rounded-lg p-3">
+						<div class="flex flex-1 flex-col">
+							<div class="text-accent-foreground flex flex-col space-y-2 text-xs font-medium">
+								{file.name}
+							</div>
+							<div class="text-muted-foreground text-xs">
+								{(file?.size / 1_000_000).toPrecision(2)} MB
+							</div>
+						</div>
+						<div class="flex space-x-3">
+							{#if file.type.startsWith('image/')}
+								<Button size="sm" variant="outline" onclick={() => (cropping = true)}
+									>Zuschneiden</Button
+								>
+							{/if}
+							<Button
+								variant="outline"
+								size="sm"
+								on:click={() => {
+									files = [];
+								}}>Löschen</Button
+							>
+						</div>
+					</div>
+					{#if file.type.startsWith('image/')}
+						{#if cropping}
+							<div class="">
+								<FileUploadCropper bind:getCroppedImage imageUrl={URL.createObjectURL(file)} />
+							</div>
+						{:else}
+							<div class="flex max-h-3/4 w-full items-center justify-center">
+								<img
+									class="h-full w-auto object-cover"
+									src={URL.createObjectURL(file)}
+									alt={file.name}
+								/>
+							</div>
+						{/if}
+					{/if}
+				{/each}
+			</div>
+		{:else}
+			<div class="grid gap-4 py-4">
+				<label
+					for="file"
+					class="text-muted-foreground bg-accent flex w-full items-center justify-center rounded-lg py-12 text-xs"
+				>
+					Klicke auf die Fläche, um Dateien auszuwählen.
+				</label>
+				<input id="file" name="file" type="file" class="hidden" onchange={handleInputChange} />
+			</div>
+		{/if}
+		<Dialog.Footer>
+			{#if !cropping}
+				<Button
+					disabled={files.length === 0}
+					on:click={() => {
+						fileStore.set(files);
+						confirmUpload.set(true);
+						resetFileUpload();
+						files = [];
+					}}>Fertig</Button
+				>
 			{:else}
-				<div class="">{file.name}</div>
+				<Button
+					onclick={() => {
+						cropping = false;
+						if (getCroppedImage) {
+							getCroppedImage().then((blob) => {
+								files = [new File([blob], 'cropped_' + files[0].name, { type: files[0].type })];
+							});
+						}
+					}}>Zuschneiden</Button
+				>
 			{/if}
-		</div>
+		</Dialog.Footer>
 	</Dialog.Content>
 </Dialog.Root>

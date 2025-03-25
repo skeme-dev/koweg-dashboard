@@ -25,6 +25,7 @@
 	import * as Card from '$lib/components/ui/card/index.js';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 	import * as Select from '$lib/components/ui/select/index.js';
+	import * as ToolTip from '$lib/components/ui/tooltip';
 	import * as Sheet from '$lib/components/ui/sheet/index.js';
 	import * as Table from '$lib/components/ui/table/index.js';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
@@ -33,12 +34,16 @@
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 	import ImageUploadDialog from '$lib/components/ImageUploadDialog.svelte';
 	import DeleteDialog from '$lib/components/DeleteDialog.svelte';
-	import { Trash, Trash2 } from 'lucide-svelte';
+	import { Save, Trash, Trash2 } from 'lucide-svelte';
 	import { enhance } from '$app/forms';
 	import Calendar from '$lib/components/ui/calendar/calendar.svelte';
 	import EventsCard from '$lib/components/teams/events-card.svelte';
 
 	import getFiles from '$lib/fileUpload';
+	import { requestDelete } from '$lib/components/delete-dialog';
+	import { toast } from 'svelte-sonner';
+	import { changeTeamImage, deleteTeam } from '$lib/api/teams';
+	import { invalidateAll } from '$app/navigation';
 
 	let { data }: { data: PageData } = $props();
 
@@ -64,17 +69,19 @@
 	let selectedWeekday = $state();
 	let addTrainingSchedule = $state(false);
 
+	let changedImage = $state.raw(null);
+
 	let formElement;
 </script>
 
 <!-- <ImageUploadDialog bind:image={imageFile} bind:open={imageUploadDialogOpen} /> -->
 
-<DeleteDialog
+<!-- <DeleteDialog
 	bind:open={deleteTeamDialogOpen}
 	dialogTitle="Team löschen"
 	dialogDescription="Das Löschen dieses Teams kann nicht mehr rückgängig gemacht werden."
 	onDelete={() => alert('LÖSCHEN')}
-/>
+/> -->
 <main class="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 !pb-12">
 	<div class="mx-auto grid max-w-[59rem] flex-1 auto-rows-max gap-4">
 		<div class="flex items-center gap-4">
@@ -94,8 +101,24 @@
 			</h1>
 			<!-- <Badge variant="outline" class="ml-auto sm:ml-0">In stock</Badge> -->
 			<div class="hidden items-center gap-2 md:ml-auto md:flex">
-				<Button variant="outline" size="sm" onclick={() => (deleteTeamDialogOpen = true)}
-					>Löschen</Button
+				<Button
+					variant="outline"
+					size="sm"
+					onclick={() => {
+						requestDelete('Team löschen', () => {
+							console.log('TEAM LÖSCHEN');
+							deleteTeam(
+								data.team.id,
+								() => {
+									window.location.href = '/departments/' + data.team.department;
+								},
+								(error) => {
+									console.error(error);
+									toast.error('Fehler beim Löschen des Teams.');
+								}
+							);
+						});
+					}}>Löschen</Button
 				>
 				<Button size="sm">Speichern</Button>
 			</div>
@@ -285,10 +308,53 @@
 								src={data.team.team_image}
 								width="300"
 							/>
+							{#if changedImage}
+								<div class="flex bg-accent rounded-lg p-2">
+									<div class="w-10 h-10 overflow-hidden">
+										<img
+											class="w-full h-full rounded-md object-cover"
+											src={URL.createObjectURL(changedImage)}
+											alt=""
+										/>
+									</div>
+									<Tooltip.Root>
+										<Tooltip.Trigger asChild let:builder>
+											<Button
+												on:click={() =>
+													changeTeamImage(
+														data.team.id,
+														changedImage,
+														async () => {
+															toast.success('Bild wurde erfolgreich geändert.');
+															await invalidateAll();
+															changedImage = null;
+														},
+														(error) => {
+															console.log(error);
+															toast.error('Fehler beim Ändern des Bildes.');
+														}
+													)}
+												class="ml-auto"
+												builders={[builder]}
+												size="icon"
+												variant="outline"
+											>
+												<Save class="w-4 h-4" />
+											</Button>
+										</Tooltip.Trigger>
+										<Tooltip.Content>
+											<p>Bild speichern</p>
+										</Tooltip.Content>
+									</Tooltip.Root>
+								</div>
+							{/if}
 							<div class="">
 								<button
 									onclick={() => {
-										getFiles();
+										getFiles().then((files) => {
+											console.log(files);
+											changedImage = files[0];
+										});
 									}}
 									class="py-3 flex w-full items-center justify-center rounded-md border border-dashed"
 								>
@@ -315,7 +381,9 @@
 			<Button variant="outline" size="sm">Discard</Button>
 			<Button size="sm">Save Product</Button>
 		</div>
-		<EventsCard events={data.team.expand.events} />
+		{#if data.team.events.length > 0}
+			<EventsCard events={data.team.expand.events} />
+		{/if}
 	</div>
 </main>
 <Dialog.Root bind:open={userSelectionOpen}>

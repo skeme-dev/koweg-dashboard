@@ -1,12 +1,9 @@
-import { readable, writable } from 'svelte/store';
+import { writable } from 'svelte/store';
 
-const fileStore = writable({
-	files: [],
-	error: null
-});
+const fileStore = writable([]);
 
-const fileUploadDialogStore = writable({
-	open: false
-});
+const uploadDialogStore = writable(false);
 
-export { fileStore, fileUploadDialogStore };
+const confirmUpload = writable(false);
+
+export { fileStore, uploadDialogStore, confirmUpload };

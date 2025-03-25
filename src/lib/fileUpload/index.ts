@@ -1,25 +1,35 @@
 import { get } from 'svelte/store';
-import { fileStore, fileUploadDialogStore } from './store';
+import { confirmUpload, fileStore, uploadDialogStore } from './store';
 
 function getFiles() {
-	const fileUploadDialogStoreState: { open: boolean } = get(fileUploadDialogStore);
-	const fileStoreState: { error: boolean; files: any[] } = get(fileStore);
+	return new Promise((resolve, reject) => {
+		const uploadDialogStoreState = get(uploadDialogStore);
 
-	if (!fileUploadDialogStoreState.open) {
-		fileUploadDialogStore.set({ open: true });
-	}
+		if (!uploadDialogStoreState) {
+			uploadDialogStore.set(true);
+		}
 
-	if (!fileStoreState.error) {
-		fileUploadDialogStore.set({ open: false });
+		const unsubscribe = confirmUpload.subscribe((confirmed) => {
+			if (confirmed) {
+				const fileStoreState = get(fileStore);
 
-		// reset fileUploadStore
-		fileStore.set({
-			files: [],
-			error: false
+				if (fileStoreState.length === 0) {
+					reject(new Error('No files'));
+				} else {
+					resolve(fileStoreState);
+				}
+
+				unsubscribe();
+				confirmUpload.set(false);
+			}
 		});
+	});
+}
 
-		return fileStoreState.files.length == 1 ? fileStoreState.files[0] : fileStoreState.files;
-	}
+export function resetFileUpload() {
+	fileStore.set([]);
+	uploadDialogStore.set(false);
+	confirmUpload.set(false);
 }
 
 export default getFiles;

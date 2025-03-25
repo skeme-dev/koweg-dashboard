@@ -6,6 +6,7 @@
 	import { invalidate } from '$app/navigation';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { CirclePlus } from 'lucide-svelte';
+	import CreateDepartmentDialog from '$lib/components/CreateDepartmentDialog.svelte';
 
 	let { data, children }: { data: LayoutData; children: Snippet } = $props();
 
@@ -13,7 +14,11 @@
 		title: item.label,
 		href: '/departments/' + item.id
 	}));
+
+	let createDepartmentDialogOpen = $state.raw(false);
 </script>
+
+<CreateDepartmentDialog bind:open={createDepartmentDialogOpen} />
 
 <div class="space-y-6 p-10 pb-16 md:block">
 	<div class="flex items-end justify-between">
@@ -21,7 +26,13 @@
 			<h2 class="text-2xl font-bold tracking-tight">Abteilungen verwalten</h2>
 			<p class="text-muted-foreground">Verwalte alle Abteilungen, sowie deren Teams.</p>
 		</div>
-		<Button size="lg" class="gap-2 text-sm">
+		<Button
+			size="lg"
+			class="gap-2 text-sm"
+			onclick={() => {
+				createDepartmentDialogOpen = true;
+			}}
+		>
 			<CirclePlus class="h-3.5 w-3.5" />
 			Abteilung hinzufügen
 		</Button>
