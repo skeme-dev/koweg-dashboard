@@ -34,7 +34,7 @@
 				aspectRatio: 16 / 9, // Seitenverhältnis 1:1 (kann geändert werden)
 				viewMode: 2,
 				autoCropArea: 1,
-				responsive: true
+				responsive: false
 			});
 		}
 	}

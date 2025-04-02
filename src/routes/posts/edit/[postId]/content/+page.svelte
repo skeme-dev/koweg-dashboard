@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { updatePost } from '$lib/api/posts';
-	import Editor from '$lib/components/editor/editor.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import Label from '$lib/components/ui/label/label.svelte';
@@ -8,12 +7,13 @@
 	import Textarea from '$lib/components/ui/textarea/textarea.svelte';
 	import { toast } from 'svelte-sonner';
 	import type { PageData } from './$types';
+	import Editor from '$lib/components/editor/editor.svelte';
 
 	let { data }: { data: PageData } = $props();
 
-	let editor;
+	let currentContent = $state.raw(data.currentPost.content);
 
-	let currentContent = $state.raw();
+	let editor;
 </script>
 
 <div class="space-y-6">

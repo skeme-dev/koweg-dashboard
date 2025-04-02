@@ -2,17 +2,8 @@
 	import type { PageData } from './$types';
 
 	import ChevronLeft from 'lucide-svelte/icons/chevron-left';
-	import House from 'lucide-svelte/icons/house';
-	import ChartLine from 'lucide-svelte/icons/chart-line';
-	import Package from 'lucide-svelte/icons/package';
-	import Package2 from 'lucide-svelte/icons/package-2';
-	import PanelLeft from 'lucide-svelte/icons/panel-left';
 	import CirclePlus from 'lucide-svelte/icons/circle-plus';
-	import Search from 'lucide-svelte/icons/search';
-	import Settings from 'lucide-svelte/icons/settings';
-	import ShoppingCart from 'lucide-svelte/icons/shopping-cart';
 	import Upload from 'lucide-svelte/icons/upload';
-	import UsersRound from 'lucide-svelte/icons/users-round';
 	import Check from 'lucide-svelte/icons/check';
 
 	import { Badge } from '$lib/components/ui/badge/index.js';
@@ -52,9 +43,6 @@
 
 	let userSelectionOpen = $state(false);
 	let selectedUsers = $state([]);
-
-	let imageUploadDialogOpen = $state(false);
-	let deleteTeamDialogOpen = $state(false);
 
 	const weekdays = [
 		{ value: 1, label: 'Montag' },

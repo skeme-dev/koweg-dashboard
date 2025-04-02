@@ -106,7 +106,7 @@
 				<Tooltip.Root>
 					<Tooltip.Trigger asChild let:builder>
 						<a
-							href="/posts/create/meta"
+							href="/posts/view/my"
 							class="text-muted-foreground hover:text-foreground flex h-9 w-9 items-center justify-center rounded-lg transition-colors md:h-8 md:w-8"
 							use:builder.action
 							{...builder}
@@ -202,7 +202,7 @@
 								Benutzer
 							</a>
 							<a
-								href="/posts/create/meta"
+								href="/posts/view/my"
 								class="text-muted-foreground hover:text-foreground flex items-center gap-4 px-2.5"
 							>
 								<BookOpen class="h-5 w-5" />

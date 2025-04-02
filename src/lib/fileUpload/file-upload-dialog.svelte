@@ -43,11 +43,11 @@
 		}
 	}}
 >
-	<Dialog.Content class={cropping ? 'max-w-fit' : 'max-w-[50%]'}>
+	<Dialog.Content class={cropping ? 'max-w-fit min-h-[75%]' : 'max-w-[50%]'}>
 		<Dialog.Header>
 			<Dialog.Title>Dateien hochladen</Dialog.Title>
 			<Dialog.Description>
-				Make changes to your profile here. Click save when you're done.
+				Lade Dateien hoch und schneide Bilder gegebenfalls zu.
 			</Dialog.Description>
 		</Dialog.Header>
 		{#if files.length > 0}
@@ -64,8 +64,8 @@
 						</div>
 						<div class="flex space-x-3">
 							{#if file.type.startsWith('image/')}
-								<Button size="sm" variant="outline" onclick={() => (cropping = true)}
-									>Zuschneiden</Button
+								<Button size="sm" variant="outline" onclick={() => (cropping = !cropping)}
+									>{cropping ? 'Abbrechen' : 'Zuschneiden'}</Button
 								>
 							{/if}
 							<Button
@@ -83,7 +83,7 @@
 								<FileUploadCropper bind:getCroppedImage imageUrl={URL.createObjectURL(file)} />
 							</div>
 						{:else}
-							<div class="flex max-h-3/4 w-full items-center justify-center">
+							<div class="flex max-h-[300px] w-full items-center justify-center">
 								<img
 									class="h-full w-auto object-cover"
 									src={URL.createObjectURL(file)}

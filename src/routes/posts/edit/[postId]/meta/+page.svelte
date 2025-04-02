@@ -8,26 +8,26 @@
 	import type { PageData } from './$types';
 	import getFiles from '$lib/fileUpload';
 	import { toast } from 'svelte-sonner';
-	import { createPostByMetaData, updatePost } from '$lib/api/posts';
-	import { invalidateAll } from '$app/navigation';
+	import { updatePost } from '$lib/api/posts';
 
 	let { data }: { data: PageData } = $props();
 
-	let currentTitle = $state.raw('');
-	let currentDescription = $state.raw('');
-	let currentHeroImage: File | null = $state.raw(null);
+	let currentTitle = $state.raw(data.currentPost.title);
+	let currentDescription = $state.raw(data.currentPost.description);
+	let currentHeroImage: File | null = $state.raw(data.currentPost.heroImageFileObject);
 
 	let canSave = $derived.by(() => {
-		return currentTitle != '' && currentDescription != '' && currentHeroImage;
+		return (
+			(currentTitle != data.currentPost.title ||
+				currentDescription != data.currentPost.description ||
+				currentHeroImage?.name != data.currentPost.heroImage) &&
+			currentTitle != '' &&
+			currentDescription != '' &&
+			currentHeroImage
+		);
 	});
 
 	console.log(data);
-
-	console.log(
-		data.posts.find((p) => {
-			p.title == currentTitle;
-		})
-	);
 </script>
 
 <div class="space-y-6">
@@ -67,19 +67,7 @@
 		<div class="flex w-full max-w-sm flex-col gap-2">
 			<Label for="image">Bild</Label>
 			{#if !currentHeroImage}
-				<Button
-					variant="outline"
-					onclick={() => {
-						getFiles()
-							.then((files) => {
-								currentHeroImage = files[0];
-							})
-							.catch((err) => {
-								console.error(err);
-								return toast.error('Fehler beim Hochladen des Bildes.');
-							});
-					}}>Bild hochladen</Button
-				>
+				<Input name="image" type="file" id="image" accept="image/*" />
 			{:else}
 				<div class="p-3 border bg-white rounded-md flex justify-between items-center">
 					<p class="text-sm">
@@ -89,13 +77,20 @@
 						variant="ghost"
 						size="sm"
 						onclick={() => {
+							if (currentHeroImage?.name != data.currentPost.heroImage) {
+								return (currentHeroImage = data.currentPost.heroImageFileObject);
+							}
+
 							getFiles().then((files) => {
 								if (currentHeroImage.name == files[0].name) {
 									return toast.info('Das Bild ist bereits ausgewählt.');
 								}
 								currentHeroImage = files[0];
 							});
-						}}>Bild ändern</Button
+						}}
+						>{currentHeroImage?.name != data.currentPost.heroImage
+							? 'Zurücksetzen'
+							: 'Bild ändern'}</Button
 					>
 				</div>
 			{/if}
@@ -109,27 +104,26 @@
 			disabled={!canSave}
 			onclick={() => {
 				let updateData = {
-					...(currentTitle != '' && {
+					...(currentTitle != data.currentPost.title && {
 						title: currentTitle
 					}),
-					...(currentDescription != '' && {
+					...(currentDescription != data.currentPost.description && {
 						description: currentDescription
 					}),
-					...(currentHeroImage?.name != null && {
+					...(currentHeroImage?.name != data.currentPost.heroImage && {
 						heroImage: currentHeroImage
 					})
 				};
 
-				console.log(updateData);
-
-				createPostByMetaData(
+				updatePost(
+					data.currentPost.id,
 					updateData,
-					(res) => {
-						return window.location.replace('/posts/edit/' + JSON.parse(res.data)[1] + '/content');
+					async () => {
+						toast.success('Metadaten erfolgreich gespeichert.');
 					},
 					(error) => {
 						console.error(error);
-						return toast.error('Fehler beim Erstellen des Berichts.');
+						return toast.error('Fehler beim Speichern der Metadaten.');
 					}
 				);
 			}}>Speichern</Button

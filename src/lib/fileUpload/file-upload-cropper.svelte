@@ -52,7 +52,7 @@
 		text-align: center;
 		margin-top: 20px;
 		display: block;
-		height: calc(100vh * (1 / 3));
+		height: 300px;
 		width: 100%;
 	}
 </style>
