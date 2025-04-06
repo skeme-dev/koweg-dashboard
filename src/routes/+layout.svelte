@@ -25,7 +25,7 @@
 	import * as Table from '$lib/components/ui/table/index.js';
 	import * as Tabs from '$lib/components/ui/tabs/index.js';
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
-	import { BookOpen, Building2, Inbox, Volleyball } from 'lucide-svelte';
+	import { BookOpen, Building2, Inbox, Megaphone, Volleyball } from 'lucide-svelte';
 	import { page } from '$app/state';
 	import FileUploadDialog from '$lib/fileUpload/file-upload-dialog.svelte';
 	import DeleteDialog from '$lib/components/delete-dialog/delete-dialog.svelte';
@@ -145,6 +145,34 @@
 					</Tooltip.Trigger>
 					<Tooltip.Content side="right">Abteilungen</Tooltip.Content>
 				</Tooltip.Root>
+				<Tooltip.Root>
+					<Tooltip.Trigger asChild let:builder>
+						<a
+							href="/files"
+							class="text-muted-foreground hover:text-foreground flex h-9 w-9 items-center justify-center rounded-lg transition-colors md:h-8 md:w-8"
+							use:builder.action
+							{...builder}
+						>
+							<Building2 class="h-5 w-5" />
+							<span class="sr-only">Dateien</span>
+						</a>
+					</Tooltip.Trigger>
+					<Tooltip.Content side="right">Dateien</Tooltip.Content>
+				</Tooltip.Root>
+				<Tooltip.Root>
+					<Tooltip.Trigger asChild let:builder>
+						<a
+							href="/sponsors"
+							class="text-muted-foreground hover:text-foreground flex h-9 w-9 items-center justify-center rounded-lg transition-colors md:h-8 md:w-8"
+							use:builder.action
+							{...builder}
+						>
+							<Building2 class="h-5 w-5" />
+							<span class="sr-only">Sponsoren</span>
+						</a>
+					</Tooltip.Trigger>
+					<Tooltip.Content side="right">Sponsoren</Tooltip.Content>
+				</Tooltip.Root>
 			</nav>
 			<nav class="mt-auto flex flex-col items-center gap-4 px-2 sm:py-5">
 				<Tooltip.Root>
@@ -221,6 +249,13 @@
 							>
 								<Building2 class="h-5 w-5" />
 								Abteilungen
+							</a>
+							<a
+								href="/sponsors"
+								class="text-muted-foreground hover:text-foreground flex items-center gap-4 px-2.5"
+							>
+								<Megaphone class="h-5 w-5" />
+								Sponsoren
 							</a>
 						</nav>
 					</Sheet.Content>
