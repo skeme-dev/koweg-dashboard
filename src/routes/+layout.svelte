@@ -25,7 +25,7 @@
 	import * as Table from '$lib/components/ui/table/index.js';
 	import * as Tabs from '$lib/components/ui/tabs/index.js';
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
-	import { BookOpen, Building2, Inbox, Megaphone, Volleyball } from 'lucide-svelte';
+	import { BookOpen, Building2, Files, Inbox, Megaphone, Volleyball } from 'lucide-svelte';
 	import { page } from '$app/state';
 	import FileUploadDialog from '$lib/fileUpload/file-upload-dialog.svelte';
 	import DeleteDialog from '$lib/components/delete-dialog/delete-dialog.svelte';
@@ -153,7 +153,7 @@
 							use:builder.action
 							{...builder}
 						>
-							<Building2 class="h-5 w-5" />
+							<Files class="h-5 w-5" />
 							<span class="sr-only">Dateien</span>
 						</a>
 					</Tooltip.Trigger>
@@ -167,7 +167,7 @@
 							use:builder.action
 							{...builder}
 						>
-							<Building2 class="h-5 w-5" />
+							<Megaphone class="h-5 w-5" />
 							<span class="sr-only">Sponsoren</span>
 						</a>
 					</Tooltip.Trigger>
