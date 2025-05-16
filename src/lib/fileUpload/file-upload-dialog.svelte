@@ -13,7 +13,6 @@
 
 	let cropping: boolean = $state.raw(false);
 
-	let originalFile = $state.raw(null);
 	// svelte-ignore non_reactive_update
 	let getCroppedImage: (() => Promise<unknown>) | undefined;
 
