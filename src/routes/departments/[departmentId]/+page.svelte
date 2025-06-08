@@ -5,7 +5,7 @@
 	import Label from '$lib/components/ui/label/label.svelte';
 	import Textarea from '$lib/components/ui/textarea/textarea.svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
-	import { Check, CirclePlus, Pen, Trash2 } from 'lucide-svelte';
+	import { Check, CirclePlus, KeyRound, Pen, Trash2 } from 'lucide-svelte';
 	import * as Card from '$lib/components/ui/card/index.js';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import * as Command from '$lib/components/ui/command/index.js';
@@ -16,6 +16,7 @@
 	import { invalidateAll } from '$app/navigation';
 	import CreateTeamDialog from '$lib/components/CreateTeamDialog.svelte';
 	import { onMount } from 'svelte';
+	import PermissionsDialog from '$lib/components/PermissionsDialog.svelte';
 
 	let { data }: { data: PageData } = $props();
 
@@ -38,8 +39,10 @@
 	let selectedUser = $state.raw(null);
 
 	let createTeamDialogOpen = $state.raw(false);
+	let permissionDialogOpen = $state.raw(false);
 </script>
 
+<PermissionsDialog bind:open={permissionDialogOpen} permissions={data.permissions} users={data.users} />
 <CreateTeamDialog departmentId={data.department.id} bind:open={createTeamDialogOpen} />
 <div class="flex flex-col">
 	<div class="flex gap-6">
@@ -108,7 +111,8 @@
 				</div>
 			</Card.Content>
 		</Card.Root>
-		<Card.Root class="min-w-[25%] h-fit">
+		<div class="min-w-[25%] space-y-6">
+		<Card.Root class="h-fit">
 			<Card.Header>
 				<Card.Title>Abteilungsleiter</Card.Title>
 			</Card.Header>
@@ -145,6 +149,11 @@
 				</Button>
 			</Card.Footer>
 		</Card.Root>
+		<Button onclick={() => (permissionDialogOpen = true)} variant="outline" class="w-full">
+			<KeyRound class="mr-2 w-4 h-4" />
+			<span> Zugriff verwalten </span>
+		</Button>
+	</div>
 	</div>
 
 	<div class="space-y-3 mt-3">
